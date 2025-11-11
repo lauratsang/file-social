@@ -71,7 +71,7 @@
 
 </head>
 <body>
-    <script>
+  <script>
       const log = named_log('file-social')
       
       // Constants
@@ -308,7 +308,7 @@
         const list = Q('#list')
         const item = new URLSearchParams(location.search).get('')?.split('?')[0]
         // Fetch all tag files dynamically
-        fetch('/api/posts')
+          fetch('/api/posts')
           .then(res => res.json())
           .then(async data => {
             const files = data.posts.map(p => p.path)
@@ -328,7 +328,7 @@
             for (const configFile of configFiles) {
               const tagName = configFile.slice(1) // Remove leading '-'
               const content = await fetch(`/config/${configFile}`)
-                .then(res => res.text())
+          .then(res => res.text())
                 .then(text => text.split('\n').filter(x => x && !x.startsWith(COMMENT_PREFIX)))
                 .catch(e => [])
               
@@ -482,15 +482,15 @@
               // Helper to render by extension
               const renderByExtension = (src, ext) => {
                 switch (ext.toLowerCase()) {
-                  case '.png': case '.jpg': case '.jpeg': case '.gif': case '.webp':
+                case '.png': case '.jpg': case '.jpeg': case '.gif': case '.webp':
                     return `<div style="background: white; padding: .5em; width: 100%; box-sizing: border-box; display: flex; justify-content: flex-start;"><img src="${src}" style="max-height: 400px; max-width: 100%; width: auto; height: auto; object-fit: contain;" /></div>`
                   case '.mp4': case '.webm':
                     return renderVideo(src)
                   case '.html': case '.htm':
                     return `<iframe src="${src}" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms" onload="
-                    const L = event.target
-                    let prev_height = undefined
-                    const resize = () => {
+                  const L = event.target
+                  let prev_height = undefined
+                  const resize = () => {
                       L.height = 400
                       L.height = L.contentWindow.document.documentElement.scrollHeight + 20
                       const min400 = L.height
@@ -500,8 +500,8 @@
                       const height = min0 === 0 ? min400 : min0
                       const changed = height !== prev_height
                       prev_height = height
-                      return changed
-                    }
+                    return changed
+                  }
                     setTimeout(() => resize(), 100)
                     setInterval(() => resize(), 1_000)
                     "></iframe>`
@@ -749,22 +749,22 @@
                   const renderData = renders[item.id]
                   if (renderData) {
                     try {
-                      if (typeof renderData === 'object' && renderData.html) {
-                        render_target.outerHTML = renderData.html
-                        renderData.load()
-                      } else {
-                        render_target.outerHTML = renderData
-                      }
+                    if (typeof renderData === 'object' && renderData.html) {
+                      render_target.outerHTML = renderData.html
+                      renderData.load()
+                    } else {
+                      render_target.outerHTML = renderData
+                    }
                       setupVideoObservers()
                       delete renders[item.id]
                       loadObserver.unobserve(item)
-                    } catch {}
+                  } catch {}
                   }
                 }
               }
             })
           }, { rootMargin: '200% 0px' })
-          
+              
           // Use IntersectionObserver for unloading far items
           const unloadObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -796,7 +796,7 @@
             QQ(list, '.item').forEach(item => {
               loadObserver.observe(item)
               unloadObserver.observe(item)
-            })
+              })
           }
           
           const handleScroll = window['handleScroll'] = () => {
@@ -837,7 +837,7 @@
             })
           })
           iframeObserver.observe(list, { childList: true, subtree: true })
-          
+
           // Keyboard navigation with tracked position
           let lastNavigatedItem = null
           let isNavigating = false

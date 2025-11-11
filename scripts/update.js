@@ -1,31 +1,40 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process')
-const fs = require('fs')
-const path = require('path')
-const https = require('https')
+import { execSync } from 'child_process'
+import fs from 'fs'
+import path from 'path'
+import https from 'https'
+import { fileURLToPath } from 'url'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
 
 console.log('🔄 Checking for file-social updates...\n')
 
-// Check if this is a git repo
+// Check if this is tracking the upstream file-social repo
 const isGitRepo = fs.existsSync(path.join(ROOT, '.git'))
 
 if (isGitRepo) {
   try {
-    const status = execSync('git status --porcelain', { encoding: 'utf8' })
-    if (status.trim()) {
-      console.log('⚠️  You have uncommitted changes.')
-      console.log('This looks like a git repository.\n')
+    // Check if they have the file-social remote
+    const remotes = execSync('git remote -v', { encoding: 'utf8' })
+    const hasFileSocialRemote = remotes.includes('cfreshman/file-social')
+    
+    if (hasFileSocialRemote) {
+      const status = execSync('git status --porcelain', { encoding: 'utf8' })
+      if (status.trim()) {
+        console.log('⚠️  You have uncommitted changes.')
+      }
+      console.log('This is a git clone of file-social.\n')
       console.log('To update, run:')
       console.log('  git stash')
       console.log('  git pull origin main')
       console.log('  git stash pop\n')
       process.exit(0)
     }
+    // Otherwise, they have their own git repo - continue with update
   } catch (e) {
-    // Not a git repo or no git installed
+    // Git command failed, continue with update
   }
 }
 
